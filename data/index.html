@@ -7,20 +7,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
     <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="https://unpkg.com/ag-grid/dist/ag-grid.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
-
-    <link href="https://unpkg.com/event-drops/dist/style.css" rel="stylesheet"/>
-    <script src="https://unpkg.com/event-drops/dist/index.js"></script>
-
-
+    
+    <link rel="stylesheet" type="text/css" href="./../index.css">
+    
+    
     <link href="./../lib/bootstrap-4/css/bootstrap.css" rel="stylesheet">
     <script src="./../lib/bootstrap-4/js/bootstrap.js"></script>
     <script src="showStats.js"></script>
+    
 
     <script type="text/javascript">
-
-
+        
         $(document).ready(function () {
             var all_times = [];
             var data = all_data;
@@ -312,15 +310,38 @@
         })
         ;
     </script>
+    
 </head>
 
 
 <body>
-<div class="navbar-inner" style="padding: 5px;">
+<div class="navbar-inner navbar navbar-toggleable-md navbar-light" style="padding: 5px;">
     <div style="padding-left: 20px;">
-        <h2><a class="brand" style="color: #000000;" href="./index.html">Hypo: We are with you!</a></h2>
+        <button class="navbar-toggler navbar-toggler-right"
+                type="button" data-toggle="collapse"
+                data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--<h3>-->
+        <a class="brand" style="color: #000000;" href="./index.html"><strong>Hypo: We are with you!</strong></a>
+        <!--</h3>-->
+
+
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="./../">Tell us what happened <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="./../comments">Share your story/ Seek mentors</a>
+                <a class="nav-item nav-link" href="./../data">See the stat: you are not alone </a>
+            </div>
+        </div>
     </div>
 </div>
+
+
+
+
 <div class="container-fluid">
     <div id="org-selection"></div>
 
@@ -372,80 +393,4 @@
 
 </body>
 
-<style>
-    body{
-        background-color: #f8d7da;
-        
-    }
-    .container-fluid {
-        padding-left:40px;
-        padding-right:10px;
-        padding-top:10px;
-        padding-bottom: 20px;
-        background-color: #dae0e5;
-    }
-    
-    .vbar{
-        fill:#8a89a6;
-    }
-    
-    svg, #tagcloud {
-        background: #FFFFFE;
-        background-color: #FFFFFE;
-    }
-    .arc text {
-        font: 10px sans-serif;
-        text-anchor: middle;
-    }
-
-    .arc path {
-        stroke: #fff;
-    }
-    
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: #D4D8DA;
-        stroke-width: 1px;
-        shape-rendering: crispEdges;
-    }
-    .x path {
-        display: none;
-    }
-    .toolTip {
-        position: absolute;
-        display: none;
-        min-width: 80px;
-        height: auto;
-        background: none repeat scroll 0 0 #ffffff;
-        border: 1px solid #6F257F;
-        padding: 14px;
-        text-align: center;
-    }
-    
-    .orgwise, .overall {
-        border-radius: 10px;
-        border-color: #F0f0f0;
-        border-width: 2px;
-        padding: 5px;
-        background: #F5F5F5;
-        margin-bottom:20px;
-    }
-
-    .tagcloudlink{
-        border-radius: 6px;
-        -moz-border-radius: 6px;
-        background-color: #F5F5F5;
-        /* float:left;*/
-        color:#003333;
-        padding: 3px 4px;
-        margin: 2px;
-        /* opacity: 0.6;*/
-        /* border-style: solid;*/
-        /* border-color:#588f27;*/
-        float: none;
-    }
-    
-    
-</style>
 </html>
