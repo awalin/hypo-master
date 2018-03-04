@@ -1,0 +1,284 @@
+define (require)->
+  Marionette = require 'marionette'
+  Mixin = require 'uac/common/Mixin'
+  templates = require 'sf/jade/templates'
+  d3 = require 'd3'
+  Backbone = require 'backbone'
+  dateUtils = require 'uac/common/DateUtils'
+
+  class EventDetailsView extends Marionette.Layout
+    template: templates['event-details-layout']
+
+  class EventTimeLineView extends Marionette.Layout
+    template: templates['exd-timeline']
+    
+    ui:
+      timeline_region: '.timeline'
+      time_axis: '.time-axis'
+      sequential_radio: 'input[id=sequential]'
+      grouped_radio: 'input[id=grouped]'
+    regions:
+      event_region: '.event-details'
+    events:
+      "click @ui.sequential_radio": "_group_sequentially"
+      "click @ui.grouped_radio": "_group_by_type"  
+      
+    serializeData: ->
+      total: @details.length
+      from_time: dateUtils.format_date(@from_time)
+      to_time: dateUtils.format_date(@to_time)     
+      
+    initialize: (options)->
+      {@data, @width} = options
+      @times = []
+      @radius = 7.5
+      @transition_time = 0
+      @event_types = []
+      unless @width? 
+        @width = 1024 
+        
+      # a categorical color scale for teh different event types. The colors are all very different from each other
+      # and they are not sequential
+      # each type string is mapped to an RGB color, upto 10 colors.
+      @colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+
+      @details = []
+      _.each @data, (value) =>
+        type = value['detail_type']
+        @times.push new Date(value.detail_time)
+        @details.push
+          type: type
+          time: value.detail_time
+          value: value[type]
+          datetime: new Date(value.detail_time)
+        unless _.contains @event_types, type
+          @event_types.push type
+
+      # making sure the events are sorted by their datetime 
+      @details = _.sortBy( @details, 'datetime')      
+
+      @width = Math.max(@radius+2*(@details.length+1), @width*9/12 - 100)      
+      # a time scale for placing the events based on their time
+      # so each date is mapped to a pixel coordinate
+      # the range is the output pixel in the screen
+      # the domain is input dates of the events 
+      # so the first date will be placed in 0 px
+      # the last date will be placed in the @width px 
+      @timeScale = d3.scaleUtc()
+        .domain(d3.extent(@times) )
+        .range([0, @width])
+      
+      @from_time = d3.extent(@times)[0]
+      @to_time = d3.extent(@times)[1]
+            
+    _make_Axis: ->
+      #define the X axis
+      # since the events occur in one day, no need to show the date part, just show the time part
+      tick_format = d3.utcFormat('%H:%M:%SZ')
+      xAxis = d3.axisBottom()
+        .scale(@timeScale)
+        .tickFormat(tick_format)
+
+      timeaxis = d3.select(".time-axis")
+        .append("svg")
+        .attr("id", "vis_time_axis")
+        .attr('class', 'uac-theme-d3-svg-container')
+        .attr("width", @width+4*@radius)
+        .attr("height", 30)
+      
+      timeaxis.append('g')
+        .attr("transform", "translate(#{2*@radius}, 0)")
+        .attr('class', 'uac-theme-d3-axis')
+        .call(xAxis)
+
+      dateFormat = d3.utcFormat('%Y-%m-%d')
+      timeaxis.append('g')
+        .attr("transform", "translate(0, 25)")
+        .attr('class', 'uac-theme-d3-axis')
+        .append('text')
+        .text(dateFormat(@from_time))
+        .style('font-size', 'smaller')
+      
+    _make_timeline: ->
+      # for each item in @details array, append a group element g to the svg container
+      # now select all those g, and assign the selection to a variable called node 
+      @node = @vis.selectAll(".node")
+        .data(@details)
+        .enter().append("g")
+        .attr("class", "node")
+        .on("click", (d) =>
+          selected_elem = d3.event.currentTarget
+          @_handle_click(d, selected_elem)
+        )
+        .on("mouseover", () =>
+          # add hover event handler to the  group element  g, 
+          # so that all children of the g element can listen to the hover
+          # on mouse over, highlight the circle  
+          selected_elem = d3.event.currentTarget
+          d3.select(selected_elem).select('circle').style("fill", (d) => d3.rgb(@colorScale(d.type)).brighter(2))
+        )
+        .on("mouseout", () =>
+          # on mouse out, return the original color  
+          selected_elem = d3.event.currentTarget
+          d3.select(selected_elem).select('circle').style("fill", (d) => d3.rgb(@colorScale(d.type)))
+        )
+      
+      # for each element g in the node variable, append a circle. 
+      # circle position is based on its time 
+      
+      @node.append("circle")
+      .style("fill", (d) => d3.rgb(@colorScale(d.type)))
+      .style("stroke",  (d) => d3.rgb(@colorScale(d.type)).brighter(2))
+      .attr("r", @radius)
+      .style("stroke-width", 0.5)
+
+      # assign tooltip for each element 
+      @node
+      .append("title")
+      .text((d) ->
+        d.type
+      )
+
+      # assign text for each element 
+      @node.append("text")
+      .attr("dy", ".35em")
+      .attr("text-anchor", "middle")
+      .text((d)-> d.type[0])
+      .style('font-size', 'smaller')
+             
+    _make_legend: ->  
+      # the legend sits at the bottom, showing the color code of each type
+      # since we do not know all possible event types, we need to create this legend for each alert, 
+      #  instead of having a globally defined legend
+      # 
+      legend = d3.select(".legends")
+        .append("svg")
+        .attr("id", "vis_legend")
+        .attr('class', 'uac-theme-d3-svg-container')
+        .attr("width", @width+4*@radius)
+        .attr('height', @radius*2)
+        .append('g')
+        .attr("transform", "translate(#{1.5*@radius}, 0)")
+
+      legend_node = legend.selectAll(".legend-node")
+        .data(@event_types)
+        .enter().append("g")
+        .attr("class", "legend-node")
+
+      legend_node.append("circle")
+        .style("fill", (d) => d3.rgb(@colorScale(d)))
+        .style("stroke",  (d) => d3.rgb(@colorScale(d)).brighter(2))
+        .attr("r", 6)
+        .attr("cx", (d, i) => i*100)
+        .attr("cy", @radius)
+      
+      legend_node.append("text")
+        .attr("dy", 10)
+        .attr("dx", (d, i) => i*100 - 2.5 )
+        .text((d)-> d[0])
+        .style('font-size', 'smaller')
+
+      legend_node.append("text")
+        .attr("dy", 10)
+        .attr("dx", (d, i) => i*100 + 2*@radius)
+        .text((d)-> d)
+        .style('font-size', 'smaller')
+
+    _hide_details: ->
+      @event_region.reset()
+
+    _show_details: (data) ->
+      @event_region.show new EventDetailsView
+        model: new Backbone.Model data
+        
+    _handle_click: (element_data, context)->
+      # add click event handler to the  group element  g, 
+      # so that all children of the g element can listen to the click
+      sel = d3.select(context)
+      #  it was not selected already
+      if sel.select('circle').classed("selected-node") == false
+        d3.selectAll('circle').classed('selected-node',false)
+        d3.selectAll('circle').style('stroke-width', 0.5)
+        sel.select('circle').classed("selected-node", true)
+        sel.select('circle').style("stroke-width", 3.5)
+        @_show_details element_data
+        
+      else
+        sel.select('circle').classed('selected-node', false)
+        sel.select('circle').style('stroke-width', 0.5)
+        @_hide_details()
+
+    _group_sequentially :->
+      # keeping track of the y axis of the last drawn circle's center  
+      last_cy = 2*@radius
+      # if circles overlap, then shift the one with different type downward, let the same types overlap horizontally a bit
+      @node
+        .transition()
+        .duration(@transition_time)
+        .attr("transform", (d, i) =>
+          x = @timeScale(d.datetime)
+          if i<1
+            y = last_cy
+          else if @details[i - 1].type == d.type
+            y = last_cy
+          else
+            last_cy = last_cy + 2*@radius
+            y = last_cy
+          "translate(#{x},#{y})"
+        )
+
+      # now fix the height of the svg container
+      d3.select('#vis_timeline')
+        .transition()
+        .duration(@transition_time)
+        .attr("height", last_cy+2*@radius)
+      
+      d3.select('#vis_timeline').select('g')
+        .transition()
+        .duration(@transition_time)
+        .attr("height", last_cy+2*@radius)
+
+    _group_by_type: ->
+      # now fix the height of he svg container
+      d3.select('#vis_timeline')
+        .transition()
+        .duration(@transition_time)
+        .attr("height", (@event_types.length+1)*2*@radius)
+      
+      d3.select('#vis_timeline').select('g')
+        .transition()
+        .duration(@transition_time)
+        .attr("height", (@event_types.length+1)*2*@radius)
+      
+      @node
+      .transition()
+      .duration(@transition_time)
+      .attr("transform", (d) =>
+        x = @timeScale(d.datetime)
+        index = @event_types.indexOf(d.type)
+        y=(index+1)*2*@radius
+        "translate(#{x},#{y})"
+      )
+
+    onShow: =>
+      @_make_Axis()
+      @_make_legend()
+      # creating an svg container and 
+      # then appending a group element g to contain the event nodes
+      # transpating horizontally a bit so that the circles can be seen properly,
+      # the width is width + length of two circles , otherwise the circles in the borders are cut off 
+      @vis = d3.select(".timeline")
+        .append("svg")
+        .attr("id", "vis_timeline")
+        .attr("width", @width+4*@radius)
+        .attr('class', 'uac-theme-d3-svg-container')
+        .append('g')
+        .attr("transform", "translate(#{1.5*@radius}, 0)")
+      
+      @block_element(@ui.timeline_region)
+      @_make_timeline()
+      @_group_sequentially()
+      @unblock_element(@ui.timeline_region)
+      @transition_time = 750 
+    
+  Mixin.mixin EventTimeLineView, Mixin.Evented, Mixin.Blocked, Mixin.Messages

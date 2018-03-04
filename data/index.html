@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>You are not alone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="https://unpkg.com/ag-grid/dist/ag-grid.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <link href="https://unpkg.com/event-drops/dist/style.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/event-drops/dist/index.js"></script>
+
+
+    <link href="./../lib/bootstrap-4/css/bootstrap.css" rel="stylesheet">
+    <script src="./../lib/bootstrap-4/js/bootstrap.js"></script>
+    <script src="showStats.js"></script>
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            var all_times = [];
+            var data = all_data;
+            var events_by_orgs = [];
+            orgs.forEach(org => {
+                var obj = {};
+                obj.name = org;
+                data = _.filter(all_data, item => {
+                    return (item[33].toLowerCase() == org.toLowerCase());
+                });
+                var obj_data = [];
+                _.each(data, d => {
+                    obj_data.push({'date': new Date(d[0])});
+                    all_times.push(new Date(d[0]));
+                });
+                obj.data = obj_data;
+                events_by_orgs.push(obj);
+                // console.log(obj);
+            });
+
+
+            var
+                margin = {top: 20, right: 20, bottom: 20, left: 20},
+                radius = 10,
+                width = 940 - margin.left - margin.right,
+                height = (orgs.length) * 2.5 * radius;
+
+            var colorScale = d3.scaleOrdinal(d3.schemeCategory20).domain(orgs);
+            var timeScale = d3.scaleUtc()
+                .domain(d3.extent(all_times))
+                .range([0, width]);
+
+
+            var vis = d3.select("#timeline")
+                .append("svg")
+                .attr("id", "vis_timeline")
+                .attr("width", width + 4 * radius)
+                .attr("height", height)
+                .attr('class', 'uac-theme-d3-svg-container')
+                .append('g')
+            ;
+
+            node = vis.selectAll(".node")
+                .data(all_data)
+                .enter().append("g")
+                .attr("class", "node");
+
+
+            node
+                .transition()
+                .duration(250)
+                .attr("transform", (d) => {
+                    index = orgs.indexOf(d[33]);
+                    y =  - (index + 1) * 2.5 * radius + height;
+                    // console.log(y, " = ", index, " name ", d[33]);
+                    x = timeScale(new Date(d[0])) + radius + Math.random() ** Math.floor(300);
+                    return "translate(" + x + "," + y + ")";
+                });
+
+            node.append("svg:circle")
+                .style("fill", (d) => {
+                    return d3.rgb(colorScale(d[33]));
+                })
+                .style("stroke", (d) => {
+                    return d3.rgb(colorScale(d[33])).brighter(2);
+                })
+                .attr("r", radius)
+                .style("stroke-width", 0.5);
+
+            node.append("svg:title")
+                .text((d) => {
+                    // console.log( "Occurred on " + d[0] + " \t "+ d[4]);
+                    return "Occurred on " + d[0] + " \r\n " + d[4] + " \r\n " + d[33];
+                });
+
+            tick_format = d3.utcFormat('%d-%m-%Y');
+
+            xAxis = d3.axisBottom()
+                .scale(timeScale)
+                .tickFormat(tick_format)
+                // .ticks(d3.timeDay.every(15))
+            ;
+            
+            timeaxis = d3.select("#time-axis")
+                .append("svg")
+                .attr("id", "vis_time_axis")
+                .attr('class', 'uac-theme-d3-svg-container')
+                .attr("width", width + 4 * radius)
+                .attr("height", radius*2);
+
+            timeaxis.append('g')
+                .attr("transform", "translate(" + 2 * radius + ", 0)")
+                .attr('class', 'uac-theme-d3-axis')
+                .call(xAxis);
+
+            dateFormat = d3.utcFormat('%Y-%m-%d');
+
+            timeaxis.append('g')
+                .attr("transform", "translate(0, 25)")
+                .attr('class', 'uac-theme-d3-axis')
+                .append('text')
+                .text(dateFormat(new Date("2017-11-02")))
+                .style('font-size', 'smaller');
+
+            //    now draw the horizontal bar chart
+
+            var bar_chart_data = [];
+            _.each(events_by_orgs, event => {
+                item = {};
+                item.org = event.name;
+                item.count = event.data.length;
+                bar_chart_data.push(item);
+            });
+
+
+            var bar_width = width/3 - margin.left;
+            
+            var svg = d3.select("#horizontal-bar")
+                .append("svg")
+                .attr("id", "vis_bar_chart")
+                .attr("width", bar_width)
+                .attr("height", height);
+
+            var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+
+            var x = d3.scaleLinear().range([0, bar_width]);
+
+            var g = svg.append("g")
+                .attr("transform", "translate(" + margin.left + ",0 )");
+            
+            x.domain([0, d3.max(bar_chart_data, function (d) {
+                return d.count;
+            })]);
+            
+            var y = d3.scaleBand().range([height, 0]);
+            y.domain(bar_chart_data.map(function(d) { return d.org ; })).padding(0.1);
+            
+            g.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x).ticks(5).tickFormat(function (d) {
+                    return parseInt(d / 1000);
+                }).tickSizeInner([-height]));
+
+            g.append("g")
+                .attr("class", "y axis")
+                .call(d3.axisLeft(y));
+            
+            g.selectAll(".bar")
+                .data(bar_chart_data)
+                .enter().append("rect")
+                .attr("class", "bar")
+                .attr("x", 0)
+                .attr("height", radius*2)
+                .attr("y", function (d) {
+                    return y(d.org);
+                })
+                .attr("width", function (d) {
+                    return x(d.count);
+                })
+                .attr("fill", (d=>{
+                    return d3.rgb(colorScale(d.org));
+                }))
+                .on("mousemove", function (d) {
+                    tooltip
+                        .style("left", d3.event.pageX - 50 + "px")
+                        .style("top", d3.event.pageY - 70 + "px")
+                        .style("display", "inline-block")
+                        .html((d.org) + "<br>" + ", " + (d.count));
+                })
+                .on("mouseout", function (d) {
+                    tooltip.style("display", "none");
+                });
+
+
+        })
+        ;
+    </script>
+</head>
+
+
+<body>
+<div class="navbar-inner" style="padding: 40px;">
+    <div style="padding-left: 20px;">
+        <h2><a class="brand" style="color: #000000;" href="./index.html">Hypo</a></h2>
+        <h5>You are not alone, see the stats </h5>
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="org-selection"></div>
+
+    <div id="viz">
+        <div class="col-md-12 row">
+            <div class="col-md-8" id="viz-timeline">
+                <div class="row" id="timeline"></div>
+                <div class="row" id="time-axis"></div>
+            </div>
+            <div class="col-md-3" id="horizontal-bar">
+                
+            </div>
+            <div class="col-md-1" id="score">Safety Score</div>
+        </div>
+        <div class="row col-md-12">
+            Tag Cloud of Words
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+<style>
+    body {
+        margin: 15px;
+        background-color: #F1F3F3
+    }
+    
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #D4D8DA;
+        stroke-width: 1px;
+        shape-rendering: crispEdges;
+    }
+    .x path {
+        display: none;
+    }
+    .toolTip {
+        position: absolute;
+        display: none;
+        min-width: 80px;
+        height: auto;
+        background: none repeat scroll 0 0 #ffffff;
+        border: 1px solid #6F257F;
+        padding: 14px;
+        text-align: center;
+    }
+</style>
+</html>
