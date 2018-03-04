@@ -2,9 +2,8 @@
 
 
 ** input form
+*** Security/Privacy: Combined stat available for all, detailed comment only for the reporter. If the reporter seeks guidance he/she can choose to share their story with others from teh same organiztion. We did not implement the full access control for the hackathon, but the idea is it will be a safe space for people, they will get mental support, advice, learn about others' experience, and get string.
 
-** facebook like thread : only accessible for people of the same org
-	http://viima.github.io/jquery-comments/ 
 
 ** combined stat for all 
 
