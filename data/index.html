@@ -43,15 +43,29 @@
 
 
             var
-                margin = {top: 20, right: 20, bottom: 20, left: 20},
+                margin = {top: 20, right: 20, bottom: 20, left: 60},
                 radius = 10,
-                width = 940 - margin.left - margin.right,
-                height = (orgs.length) * 2.5 * radius;
+                width = 940 - margin.left/2 - margin.right,
+                height = 300;
 
             var colorScale = d3.scaleOrdinal(d3.schemeCategory20).domain(orgs);
             var timeScale = d3.scaleUtc()
                 .domain(d3.extent(all_times))
                 .range([0, width]);
+
+
+
+            var bar_chart_data = [];
+            _.each(events_by_orgs, event => {
+                item = {};
+                item.org = event.name;
+                item.count = event.data.length;
+                bar_chart_data.push(item);
+            });
+
+            var bar_width = width/3;
+            var y = d3.scaleBand().range([height, 0]);
+            y.domain(bar_chart_data.map(function(d) { return d.org ; })).padding(0.1);
 
 
             var vis = d3.select("#timeline")
@@ -74,10 +88,11 @@
                 .duration(250)
                 .attr("transform", (d) => {
                     index = orgs.indexOf(d[33]);
-                    y =  - (index + 1) * 2.5 * radius + height;
+                    // y =  (index)*2.5 * radius + height;
+                    y1 = y(d[33])+radius*1.5;
                     // console.log(y, " = ", index, " name ", d[33]);
-                    x = timeScale(new Date(d[0])) + radius + Math.random() ** Math.floor(300);
-                    return "translate(" + x + "," + y + ")";
+                    x = timeScale(new Date(d[0])) + radius + Math.random() * Math.floor(300);
+                    return "translate(" + x + "," + y1 + ")";
                 });
 
             node.append("svg:circle")
@@ -117,53 +132,32 @@
                 .call(xAxis);
 
             dateFormat = d3.utcFormat('%Y-%m-%d');
-
-            timeaxis.append('g')
-                .attr("transform", "translate(0, 25)")
-                .attr('class', 'uac-theme-d3-axis')
-                .append('text')
-                .text(dateFormat(new Date("2017-11-02")))
-                .style('font-size', 'smaller');
-
+            
             //    now draw the horizontal bar chart
 
-            var bar_chart_data = [];
-            _.each(events_by_orgs, event => {
-                item = {};
-                item.org = event.name;
-                item.count = event.data.length;
-                bar_chart_data.push(item);
-            });
-
-
-            var bar_width = width/3 - margin.left;
             
-            var svg = d3.select("#horizontal-bar")
+            var svg_bar = d3.select("#horizontal-bar")
                 .append("svg")
                 .attr("id", "vis_bar_chart")
                 .attr("width", bar_width)
-                .attr("height", height);
+                .attr("height", height+margin.bottom);
 
             var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
             var x = d3.scaleLinear().range([0, bar_width]);
 
-            var g = svg.append("g")
+            var g = svg_bar.append("g")
                 .attr("transform", "translate(" + margin.left + ",0 )");
             
             x.domain([0, d3.max(bar_chart_data, function (d) {
                 return d.count;
             })]);
             
-            var y = d3.scaleBand().range([height, 0]);
-            y.domain(bar_chart_data.map(function(d) { return d.org ; })).padding(0.1);
-            
             g.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x).ticks(5).tickFormat(function (d) {
-                    return parseInt(d / 1000);
-                }).tickSizeInner([-height]));
+                .call(d3.axisBottom(x).ticks(5))
+                ;
 
             g.append("g")
                 .attr("class", "y axis")
@@ -194,6 +188,89 @@
                 .on("mouseout", function (d) {
                     tooltip.style("display", "none");
                 });
+            
+            
+            
+        //     now draw the pic chart 
+            var pie_width = 300;
+            var svg_pie = d3.select("#piechart").append("svg")
+                .attr("id", "vis_pie_chart")
+                .attr("width", pie_width)
+                .attr("height", pie_width)
+        ,
+                radius = Math.min(pie_width, pie_width) / 2,
+                g = svg_pie.append("g").attr("transform", "translate(" + pie_width / 2 + "," + pie_width / 2 + ")");
+
+            var color = d3.scaleOrdinal(["#98abc5", "#8a89a6", "#7b6888", "#6b486b"]);
+            
+            var pie = d3.pie()
+                .sort(null)
+                .value(function(d) { return d.value; });
+
+            var path = d3.arc()
+                .outerRadius(radius - 10)
+                .innerRadius(0);
+
+            var label = d3.arc()
+                .outerRadius(radius - 40)
+                .innerRadius(radius - 40);
+            
+            var arc = g.selectAll(".arc")
+                .data(pie(pie_data))
+                .enter().append("g")
+                .attr("class", "arc");
+
+            arc.append("path")
+                .attr("d", path)
+                .attr("fill", function(d) { return color(d.data.type); });
+
+            arc.append("text")
+                .attr("transform", function(d) { return "translate(" + label.centroid(d) + ")"; })
+                .attr("dy", "0.35em")
+                .text(function(d) { return d.data.type+" ("+ d.data.value+"%)"; });
+            
+        //     draw the bar chart pf how supportive is the HR 
+            
+            
+            var svg_hr = d3.select("#helpfulness").append('svg').attr('id','hr_help_bar')
+                    .attr("width", bar_width*1.5)
+                    .attr("height", 300),
+                margin = {top: 20, right: 20, bottom: 30, left: 25};
+            var h_width = bar_width*1.5-margin.right-margin.left;
+            var height = 300 - margin.bottom-margin.top;
+
+            var x = d3.scaleBand().rangeRound([0, h_width]).padding(0.1),
+                y = d3.scaleLinear().rangeRound([height, 0]);
+
+            var g = svg_hr.append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            x.domain(hr_support.map(function(d, index) { return index+1; }));
+            y.domain([0, d3.max(hr_support, function(d) { return d; })]);
+
+            g.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            g.append("g")
+                .attr("class", "axis axis--y")
+                .call(d3.axisLeft(y))
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -5)
+                .attr("dx", "1.7em")
+                .attr("text-anchor", "end")
+                .text("%");
+
+            g.selectAll(".vbar")
+                .data(hr_support)
+                .enter().append("rect")
+                .attr("class", "vbar")
+                .attr("x", function(d, index ) { return x(index+1); })
+                .attr("y", function(d) { return y(d); })
+                .attr("width", x.bandwidth())
+                .attr("height", function(d) { return height - y(d); });
 
 
         })
@@ -214,17 +291,34 @@
 
     <div id="viz">
         <div class="col-md-12 row">
-            <div class="col-md-8" id="viz-timeline">
-                <div class="row" id="timeline"></div>
-                <div class="row" id="time-axis"></div>
+            <div class="col-md-12" style="padding-left:240px;padding-bottom:40px;">
+            <h3>Reported Incidents by Organizations</h3>
             </div>
-            <div class="col-md-3" id="horizontal-bar">
+            <div class="col-md-9" id="viz-timeline">
+                <h5>Reported Incidents Over Time</h5>
+                <div id="timeline"></div>
+                <div  id="time-axis"></div>
+            </div>
+            <div class="col-md-3 row" id="viz-hbar">
+                <h5>Total Incidents</h5>
+                <div id="horizontal-bar"/>
                 
             </div>
-            <div class="col-md-1" id="score">Safety Score</div>
+            <!--<div class="col-md-1" id="score">Safety Score</div>-->
         </div>
         <div class="row col-md-12">
-            Tag Cloud of Words
+            <div class="col-md-12" style="padding-left:240px;padding-bottom:40px;">
+                <h3>Overall Situation, All Organizations</h3></div>
+            <div class="col-md-4" id="viz-culprit">
+                <h5>Who is Responsible</h5>
+                <div id="piechart"></div>
+            </div>
+            <div class="col-md-4 row" id="helpfulness">
+                <h5>Helpfulness of Org (on a scale of 1 to 10)</h5>
+
+            </div>
+            
+            
         </div>
     </div>
 </div>
@@ -233,9 +327,29 @@
 </body>
 
 <style>
-    body {
-        margin: 15px;
-        background-color: #F1F3F3
+    body{
+        background-color: lightcoral;
+        
+    }
+    .container-fluid {
+        padding:20px;
+        background-color: #dae0e5;
+    }
+    
+    .vbar{
+        fill:#8a89a6;
+    }
+    
+    svg{
+        background: #FFFFFE;
+    }
+    .arc text {
+        font: 10px sans-serif;
+        text-anchor: middle;
+    }
+
+    .arc path {
+        stroke: #fff;
     }
     
     .axis path,
