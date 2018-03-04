@@ -282,8 +282,7 @@
             });
             var max = d3.max(counts);
             var min = d3.min(counts);
-
-            var color = d3.scaleLog().domain([min,max]).range(['#B8860B',"yellowgreen"]);
+            var color = d3.scaleOrdinal().domain([min,max]).range(["#98abc5", "#8a89a6", "#7b6888"]);
             //Normalization helper
             var diff = ( max == min ? 1    // if all values are equal, do not divide by zero
                 : (max - min) / (maxFontSizeEm - 1) ); //optimization: Originally we want to divide by diff
@@ -319,8 +318,7 @@
 <body>
 <div class="navbar-inner" style="padding: 5px;">
     <div style="padding-left: 20px;">
-        <h2><a class="brand" style="color: #000000;" href="./index.html">Hypo</a></h2>
-        <h5>You are not alone, see the stats </h5>
+        <h2><a class="brand" style="color: #000000;" href="./index.html">Hypo: We are with you!</a></h2>
     </div>
 </div>
 <div class="container-fluid">
@@ -329,10 +327,10 @@
     <div id="viz">
 
         <div class="row col-md-12 overall">
-            <div class="col-md-12" style="padding:40px; padding-left:240px;">
-                <h3>Overall Situation, All Organizations</h3></div>
+            <!--<div class="col-md-12" style="padding-top:10px; padding-left:340px;">-->
+                <!--<h4>Overall Situation, All Organizations</h4></div>-->
             <div class="col-md-3" id="viz-culprit">
-                <h5>Who is Responsible</h5>
+                <h6>Who is Responsible</h6>
                 <div id="piechart"></div>
             </div>
 
@@ -353,16 +351,16 @@
         
         
         <div class="col-md-12 row orgwise">
-            <div class="col-md-12" style="padding:40px; padding-left:240px;">
-            <h3>Reported Incidents by Organizations</h3>
+            <div class="col-md-12" style="padding-top:10px; padding-left:340px;">
+            <h5>Reported Incidents by Organizations</h5>
             </div>
             <div class="col-md-9" id="viz-timeline">
-                <h5>Reported Incidents Over Time</h5>
+                <h6>Reported Incidents Over Time</h6>
                 <div id="timeline"></div>
                 <div  id="time-axis"></div>
             </div>
             <div class="col-md-3 row" id="viz-hbar">
-                <h5>Total Incidents</h5>
+                <h7>Total Incidents</h7>
                 <div id="horizontal-bar"/>
                 
             </div>
@@ -380,7 +378,10 @@
         
     }
     .container-fluid {
-        padding:20px;
+        padding-left:40px;
+        padding-right:10px;
+        padding-top:10px;
+        padding-bottom: 20px;
         background-color: #dae0e5;
     }
     
