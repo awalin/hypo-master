@@ -2,9 +2,8 @@
 
 
 ** input form
+*** Security/Privacy: Combined stat available for all, detailed comment only for the reporter. If the reporter seeks guidance he/she can choose to share their story with others from teh same organiztion. We did not implement the full access control for the hackathon, but the idea is it will be a safe space for people, they will get mental support, advice, learn about others' experience, and get string.
 
-** facebook like thread : only accessible for people of the same org
-	http://viima.github.io/jquery-comments/ 
 
 ** combined stat for all 
 
@@ -29,7 +28,7 @@
   - being cat-called by any campus-mate / eve-teasing by any campus-mate or someone from the organization
   - vulgar, explicit, or threatening message in text message
   
-  
+  ![alt text](https://github.com/awalin/hypo-master/blob/master/Screen%20Shot%202018-03-04%20at%2011.49.14%20AM.png)
   
   ** If you ever felt harassed by a person in your organization, who was the harasser?  
   - male peer
