@@ -43,17 +43,15 @@
 
 
             var
-                margin = {top: 20, right: 20, bottom: 20, left: 60},
+                margin = {top: 20, right: 20, bottom: 20, left: 40},
                 radius = 10,
-                width = 940 - margin.left/2 - margin.right,
+                width = 1000 - margin.left - margin.right,
                 height = 300;
 
             var colorScale = d3.scaleOrdinal(d3.schemeCategory20).domain(orgs);
             var timeScale = d3.scaleUtc()
                 .domain(d3.extent(all_times))
                 .range([0, width]);
-
-
 
             var bar_chart_data = [];
             _.each(events_by_orgs, event => {
@@ -233,7 +231,7 @@
             
             
             var svg_hr = d3.select("#helpfulness").append('svg').attr('id','hr_help_bar')
-                    .attr("width", bar_width*1.5)
+                    .attr("width", bar_width*1.5-25)
                     .attr("height", 300),
                 margin = {top: 20, right: 20, bottom: 30, left: 25};
             var h_width = bar_width*1.5-margin.right-margin.left;
@@ -272,6 +270,45 @@
                 .attr("width", x.bandwidth())
                 .attr("height", function(d) { return height - y(d); });
 
+        // now draw the tag clouds 
+            
+            var cl = words;
+            var maxFontSizeEm = 2.5;
+            var counts = [];
+            // calculating the max and min count values
+            cl.forEach(function(val){
+                counts.push(+val.count);
+
+            });
+            var max = d3.max(counts);
+            var min = d3.min(counts);
+
+            var color = d3.scaleLog().domain([min,max]).range(['#B8860B',"yellowgreen"]);
+            //Normalization helper
+            var diff = ( max == min ? 1    // if all values are equal, do not divide by zero
+                : (max - min) / (maxFontSizeEm - 1) ); //optimization: Originally we want to divide by diff
+            // and multiple by maxFontSizeEm - 1 in getNormalizedSize.
+            var tagcloud = d3.select("#tagcloud");
+
+            tagcloud
+                .style("background-color","white")
+                .append("ul")
+                .selectAll("span")
+                .data(cl)
+                .enter().append("span")
+                .attr("class","tagcloudlink")
+                .style("line-height","0.95em")
+                .style("display","block")
+                .style("float","left")
+                .style("background-color", function(d){
+                    return ""+color(d.count);})
+                .text( function(d){
+                    return '#'+d.tag+ " ("+d.count+")" ; }
+                )					
+                .style("font-size", function(d){
+                    if(min==max) return maxFontSizeEm+"em";
+                    else return	 (1 + (d.count - min) / diff) +"em";
+                })
 
         })
         ;
@@ -290,8 +327,33 @@
     <div id="org-selection"></div>
 
     <div id="viz">
-        <div class="col-md-12 row">
-            <div class="col-md-12" style="padding-left:240px;padding-bottom:40px;">
+
+        <div class="row col-md-12 overall">
+            <div class="col-md-12" style="padding:40px; padding-left:240px;">
+                <h3>Overall Situation, All Organizations</h3></div>
+            <div class="col-md-3" id="viz-culprit">
+                <h5>Who is Responsible</h5>
+                <div id="piechart"></div>
+            </div>
+
+            <div class="col-md-5" id="vis-tagcloud">
+                <h5>Prominents Words from the Reports</h5>
+                <div id ="tagcloud">
+                </div>
+            </div>
+            
+            
+            <div class="col-md-4" id="helpfulness">
+                <h5>Org Helpfulness (on a scale of 1 to 7)</h5>
+
+            </div>
+
+
+        </div>
+        
+        
+        <div class="col-md-12 row orgwise">
+            <div class="col-md-12" style="padding:40px; padding-left:240px;">
             <h3>Reported Incidents by Organizations</h3>
             </div>
             <div class="col-md-9" id="viz-timeline">
@@ -304,22 +366,8 @@
                 <div id="horizontal-bar"/>
                 
             </div>
-            <!--<div class="col-md-1" id="score">Safety Score</div>-->
         </div>
-        <div class="row col-md-12">
-            <div class="col-md-12" style="padding-left:240px;padding-bottom:40px;">
-                <h3>Overall Situation, All Organizations</h3></div>
-            <div class="col-md-4" id="viz-culprit">
-                <h5>Who is Responsible</h5>
-                <div id="piechart"></div>
-            </div>
-            <div class="col-md-4 row" id="helpfulness">
-                <h5>Helpfulness of Org (on a scale of 1 to 10)</h5>
-
-            </div>
-            
-            
-        </div>
+       
     </div>
 </div>
 
@@ -328,7 +376,7 @@
 
 <style>
     body{
-        background-color: lightcoral;
+        background-color: #f8d7da;
         
     }
     .container-fluid {
@@ -340,8 +388,9 @@
         fill:#8a89a6;
     }
     
-    svg{
+    svg, #tagcloud {
         background: #FFFFFE;
+        background-color: #FFFFFE;
     }
     .arc text {
         font: 10px sans-serif;
@@ -372,5 +421,30 @@
         padding: 14px;
         text-align: center;
     }
+    
+    .orgwise, .overall {
+        border-radius: 10px;
+        border-color: #F0f0f0;
+        border-width: 2px;
+        padding: 5px;
+        background: #F5F5F5;
+        margin-bottom:20px;
+    }
+
+    .tagcloudlink{
+        border-radius: 6px;
+        -moz-border-radius: 6px;
+        background-color: #F5F5F5;
+        /* float:left;*/
+        color:#003333;
+        padding: 3px 4px;
+        margin: 2px;
+        /* opacity: 0.6;*/
+        /* border-style: solid;*/
+        /* border-color:#588f27;*/
+        float: none;
+    }
+    
+    
 </style>
 </html>

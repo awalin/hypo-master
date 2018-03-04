@@ -205,7 +205,7 @@ const column_names= [
 
 const orgs = ['JKL','QRS','TUV','XYZ','UVW', 'GHE','LOV','IR','MNP','DEF','ABC'];
 
-const hr_support = [30, 9, 8, 8, 15, 5, 8, 8, 0, 9];
+const hr_support = [30, 9, 8, 8, 15, 5, 8, 0];
 
 const pie_data = [
     {'type':'Peer', value: 45},
@@ -218,5 +218,20 @@ const help = [
     {'type':'Family', value: 25},
     {'type':'Supervisor', value:6},
     {'type':'Other', value:2},
+    
+]
+
+const words = [
+    {'tag':'harass', 'count': 125},
+    {'tag':'message', 'count': 86},
+    {'tag':'vulgar', 'count':140},
+    {'tag':'threat', 'count': 85},
+    {'tag':'explicit', 'count':138},
+    {'tag':'touch', 'count':33},
+    {'tag':'unwanted', 'count':32},
+    {'tag':'clothing', 'count':72},
+    {'tag':'sexual', 'count': 24},
+    {'tag':'online', 'count': 94},
+    {'tag':'image', 'count':38}
     
 ];
