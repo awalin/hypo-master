@@ -38,7 +38,11 @@ The menu has three options:
 
  ![alt text](https://github.com/awalin/hypo-master/blob/master/Screen%20Shot%202018-03-04%20at%204.07.54%20PM.png)
  
-  ##Form question for organizational safety:
+ 
+ ## Technology ## 
+ - D3 (for visualization), jQuery, Bootstrap, EJ6 
+ 
+  ## Form question for organizational safety: ##
 	
   **  Did/ Do you feel unsafe in organization?If so, who is/was responsible for making you feel unsafe? (check all that apply)**
   
