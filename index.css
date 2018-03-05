@@ -4,7 +4,9 @@ body{
 .main-body{
     min-height: 780px;
 }
-
+.card-block{
+    padding:20px 10px;
+}
 .main-body .banner-background{
     background: -moz-linear-gradient(left, rgba(28,12,19,1) 0%, rgba(10,14,10,0.85) 26%, rgba(110,119,116,0.61) 69%, rgba(237,241,242,0.43) 100%); /* FF3.6-15 */
     background: -webkit-linear-gradient(left, rgba(28,12,19,1) 0%,rgba(10,14,10,0.85) 26%,rgba(110,119,116,0.61) 69%,rgba(237,241,242,0.43) 100%); /* Chrome10-25,Safari5.1-6 */
@@ -12,9 +14,7 @@ body{
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c0c13', endColorstr='#6eedf1f2',GradientType=1 ); /* IE6-9 */
 }
 .main-body .banner{
-   
-
-
+    color: #FFFFFE;
     background-image: url("images/hypo-banner.jpg");
     width:1024px; /*width of your image*/
     height:290px; /*height of your image*/
