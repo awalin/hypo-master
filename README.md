@@ -100,4 +100,9 @@ The menu has three options:
   
  **Do you know who to contact/complain within your organization if such a problem occurs?**	
   
- **If such a problem occurs who do you go to ask for help at first?**						
+ **If such a problem occurs who do you go to ask for help at first?**
+ 
+ 
+ ## Future ##
+ 
+For real implementation, we will need a backend server, rest api to communicate with the server, a database to store the information and a load balancing infrastructure with proper security. For the hackathaon we have developed a prototype that shows the web UI. 
