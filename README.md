@@ -7,20 +7,20 @@ The platform user interface has three main parts:
 
 *3. A details/ researched aggregated overview dashboard:* The system collects the anonymized data from the reports and create an overall aggregated dashboard to give people an overall picture of our work environment, when it comes to gender-based misconduct and sexual harassment. The dashboard has several components:
 
- ##Top: All Organizations-wide (Industry/Campus) overall trend:##
+ ## Top: All Organizations-wide (Industry/Campus) overall trend: ##
  
 - A stat in a pie chart showing who is usually responsible for the miscondust or harassment. This helps people/organization to understand where to focus their energy when it comes to mitigate the problem. 
 - A tag cloud showing the most common words appearing in teh reports/stories.
 - A bar chart shwoing if the HR/ authority is helpful enough to the victims. A score of 1 means not helpful 7 means very helpful. 
 
-##Bottom: Grouped by organizations:##
+## Bottom: Grouped by organizations: ##
 - Next we show all the reports grouped by different organizations. We have used random names for imaginary organizations. 
 - A timeline view shows when the reports were filed, so we can at least see the accumulation of the reports, we also see that there is a pause of reports, may be at that time there were some social anti-harassment movement was hoing on and harassers were more cautious.
 - We also show a total reports by each organizations. 
 
 This visualizations can truly paint the big pictures while keeping the victims anonymous. We think this dashboard view should be accessible to all.
 
-##GOAL##
+## GOAL ##
 Many people do not even know their rights when it comes to speak up against harassment. We also nourish a culture of victim blaming and slut shaming. Some people feel ashamed, uncomfortable or may not even know if they are being used. We want to provide an environemnt where people can discuss and know their rights, knwo the concept of 'consent', that NO means NO, be vocal, be strong.  People would be able to share resources in this platform that are geared towards helping victims, may it be for legal purpose, metal helath counselling, or mentoring.
 
 The menu has three options:
@@ -28,13 +28,13 @@ The menu has three options:
 
 **Security/Privacy: Combined stat available for all, detailed comment only for the reporter. If the reporter seeks guidance he/she can choose to share their story with others from teh same organiztion. We did not implement the full access control for the hackathon, but the idea is it will be a safe space for people, they will get mental support, advice, learn about others' experience, and get string.**
 
-##The Reporting Form:
+## The Reporting Form:##
 
-##The Stat page:
+## The Stat page: ##
 
   ![alt text](https://github.com/awalin/hypo-master/blob/master/Screen%20Shot%202018-03-04%20at%2011.49.14%20AM.png)
   
-##The Comment/Sharing page:
+## The Comment/Sharing page: ##
 
  ![alt text](https://github.com/awalin/hypo-master/blob/master/Screen%20Shot%202018-03-04%20at%204.07.54%20PM.png)
  
