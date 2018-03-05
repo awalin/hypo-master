@@ -32,7 +32,7 @@ The menu has three options:
 
 ## The Stat page: ##
 
-  ![alt text](https://github.com/awalin/hypo-master/blob/master/Screen%20Shot%202018-03-04%20at%2011.49.14%20AM.png)
+  ![alt text](https://github.com/awalin/hypo-master/blob/master/dashboard.png)
   
 ## The Comment/Sharing page: ##
 
