@@ -1,6 +1,27 @@
 body{
-    background-color: #f8d7da !important;
+    background-color: #FFA500 !important;
+}
+.main-body{
+    min-height: 780px;
+}
 
+.main-body .banner-background{
+    background: -moz-linear-gradient(left, rgba(28,12,19,1) 0%, rgba(10,14,10,0.85) 26%, rgba(110,119,116,0.61) 69%, rgba(237,241,242,0.43) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(28,12,19,1) 0%,rgba(10,14,10,0.85) 26%,rgba(110,119,116,0.61) 69%,rgba(237,241,242,0.43) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(28,12,19,1) 0%,rgba(10,14,10,0.85) 26%,rgba(110,119,116,0.61) 69%,rgba(237,241,242,0.43) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c0c13', endColorstr='#6eedf1f2',GradientType=1 ); /* IE6-9 */
+}
+.main-body .banner{
+   
+
+
+    background-image: url("images/hypo-banner.jpg");
+    width:1024px; /*width of your image*/
+    height:290px; /*height of your image*/
+    margin-left:140px; /* If you want no margin */
+    margin-right:40px;
+    padding:0; /*if your want to padding */
+    background-repeat: no-repeat;
 }
 .container-fluid {
     padding-left:40px;

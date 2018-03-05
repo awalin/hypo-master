@@ -39,7 +39,6 @@
                 // console.log(obj);
             });
 
-
             var
                 margin = {top: 20, right: 20, bottom: 20, left: 40},
                 radius = 10,
@@ -47,6 +46,7 @@
                 height = 300;
 
             var colorScale = d3.scaleOrdinal(d3.schemeCategory20).domain(orgs);
+            
             var timeScale = d3.scaleUtc()
                 .domain(d3.extent(all_times))
                 .range([0, width]);
@@ -60,10 +60,10 @@
             });
 
             var bar_width = width/3;
+            
             var y = d3.scaleBand().range([height, 0]);
             y.domain(bar_chart_data.map(function(d) { return d.org ; })).padding(0.1);
-
-
+            
             var vis = d3.select("#timeline")
                 .append("svg")
                 .attr("id", "vis_timeline")
@@ -130,8 +130,6 @@
             dateFormat = d3.utcFormat('%Y-%m-%d');
             
             //    now draw the horizontal bar chart
-
-            
             var svg_bar = d3.select("#horizontal-bar")
                 .append("svg")
                 .attr("id", "vis_bar_chart")
@@ -187,8 +185,9 @@
             
             
             
-        //     now draw the pic chart 
-            var pie_width = 300;
+        //     now draw the pie chart
+            var top_height = 250;
+            var pie_width = top_height;
             var svg_pie = d3.select("#piechart").append("svg")
                 .attr("id", "vis_pie_chart")
                 .attr("width", pie_width)
@@ -225,18 +224,16 @@
                 .attr("dy", "0.35em")
                 .text(function(d) { return d.data.type+" ("+ d.data.value+"%)"; });
             
-        //     draw the bar chart pf how supportive is the HR 
-            
-            
+        //     draw the bar chart pf how supportive is the HR
             var svg_hr = d3.select("#helpfulness").append('svg').attr('id','hr_help_bar')
                     .attr("width", bar_width*1.5-25)
-                    .attr("height", 300),
+                    .attr("height", top_height),
                 margin = {top: 20, right: 20, bottom: 30, left: 25};
             var h_width = bar_width*1.5-margin.right-margin.left;
-            var height = 300 - margin.bottom-margin.top;
+            var top_height = top_height - margin.bottom-margin.top;
 
             var x = d3.scaleBand().rangeRound([0, h_width]).padding(0.1),
-                y = d3.scaleLinear().rangeRound([height, 0]);
+                y = d3.scaleLinear().rangeRound([top_height, 0]);
 
             var g = svg_hr.append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -246,7 +243,7 @@
 
             g.append("g")
                 .attr("class", "axis axis--x")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", "translate(0," + top_height + ")")
                 .call(d3.axisBottom(x));
 
             g.append("g")
@@ -266,7 +263,7 @@
                 .attr("x", function(d, index ) { return x(index+1); })
                 .attr("y", function(d) { return y(d); })
                 .attr("width", x.bandwidth())
-                .attr("height", function(d) { return height - y(d); });
+                .attr("height", function(d) { return top_height - y(d); });
 
         // now draw the tag clouds 
             
@@ -340,7 +337,6 @@
 
 
 <div class="container-fluid">
-    <div id="org-selection"></div>
 
     <div id="viz">
 
