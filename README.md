@@ -25,15 +25,14 @@ This visualizations can truly paint the big pictures while keeping the victims a
 ## GOAL ##
 Many people do not even know their rights when it comes to speak up against harassment. We also nourish a culture of victim blaming and slut shaming. Some people feel ashamed, uncomfortable or may not even know if they are being used. We want to provide an environment where people can discuss and know their rights, knwo the concept of 'consent', that NO means NO, be vocal, be strong.  People would be able to share resources in this platform that are geared towards helping victims, may it be for legal purpose, metal health counselling, or mentoring. This way employees and students will know before hand about the situation of their work/study place, whom to contact in case of harassing incidents, how to find support groups, and support each other. The organizations will also be able to knwo from each other, how to create a beeetr environemnt for all .The organizations will be more careful in supporting the victims rather than saving the culprits if they have a public score and space that reveals their pattern. The better organizatiosn will get better employees and studnets. 
 
-The menu has three options:
-![alt text](https://github.com/awalin/hypo-master/blob/master/Screen%20Shot%202018-03-04%20at%204.06.11%20PM.png)
-
 *Security/Privacy: Combined stat available for all, detailed comment only for the reporter. If the reporter seeks guidance he/she can choose to share their story with others from teh same organiztion. We did not implement the full access control for the hackathon, but the idea is it will be a safe space for people, they will get mental support, advice, learn about others' experience, and get string.*
+
+The menu has three options:
+  ![alt text](https://github.com/awalin/hypo-master/blob/master/menu.png)
 
 ## The Reporting Form: ##
   ![alt text](https://github.com/awalin/hypo-master/blob/master/input.png)
   
-  ![alt text](https://github.com/awalin/hypo-master/blob/master/menu.png)
 
 ## The Stat page: ##
   ![alt text](https://github.com/awalin/hypo-master/blob/master/viz.png)
