@@ -1,6 +1,6 @@
 # Hypo
 
-Demo video link: https://youtu.be/WZh6M_jEC2c 
+Demo video link: https://youtu.be/50GoRmfipg4 
 
 The platform's web user interface has three main parts:
 *1. Reporting:* victims can report their experience and hsare with others. This reports are aggregated and later used to provide overall scores for organizations. Organizations can be companies, universities, etc. 
