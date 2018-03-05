@@ -5,7 +5,7 @@ The platform user interface has three main parts:
 
 *2. Sharing/ Mentoring/finding helpful voice:* After reporting the victims can choose to share their detailed expereince with others, he or she can choose to select members of their own organizations only or to everyone. The default is only among their same organizations/ members who identify to be from teh same organizations.
 
-*3. A details/ researched aggregated overview dashboard:* The system collects the anonymized data from the reports and create an overall aggregated dashboard to give people an overall picture of our work environment, when it comes to gender-based misconduct and sexual harassment. The dashboard has several components:
+*3. A details/ researched aggregated overview dashboard:* The system collects the anonymized data from the reports and create an overall aggregated dashboard to give people an overall picture of our work ment, when it comes to gender-based misconduct and sexual harassment. The dashboard has several components:
 
  ## Top: All Organizations-wide (Industry/Campus) overall trend: ##
  
@@ -21,7 +21,7 @@ The platform user interface has three main parts:
 This visualizations can truly paint the big pictures while keeping the victims anonymous. We think this dashboard view should be accessible to all.
 
 ## GOAL ##
-Many people do not even know their rights when it comes to speak up against harassment. We also nourish a culture of victim blaming and slut shaming. Some people feel ashamed, uncomfortable or may not even know if they are being used. We want to provide an environemnt where people can discuss and know their rights, knwo the concept of 'consent', that NO means NO, be vocal, be strong.  People would be able to share resources in this platform that are geared towards helping victims, may it be for legal purpose, metal helath counselling, or mentoring.
+Many people do not even know their rights when it comes to speak up against harassment. We also nourish a culture of victim blaming and slut shaming. Some people feel ashamed, uncomfortable or may not even know if they are being used. We want to provide an environment where people can discuss and know their rights, knwo the concept of 'consent', that NO means NO, be vocal, be strong.  People would be able to share resources in this platform that are geared towards helping victims, may it be for legal purpose, metal health counselling, or mentoring. This way employees and students will know before hand about the situation of their work/study place, whom to contact in case of harassing incidents, how to find support groups, and support each other. The organizations will also be able to knwo from each other, how to create a beeetr environemnt for all .The organizations will be more careful in supporting the victims rather than saving the culprits if they have a public score and space that reveals their pattern. The better organizatiosn will get better employees and studnets. 
 
 The menu has three options:
 ![alt text](https://github.com/awalin/hypo-master/blob/master/Screen%20Shot%202018-03-04%20at%204.06.11%20PM.png)
@@ -40,7 +40,7 @@ The menu has three options:
  
  
  ## Technology ## 
- - D3 (for visualization), jQuery, Bootstrap, EJ6 
+ - D3 (for visualization), jQuery, Bootstrap, JS6 
  
   ## Form question for organizational safety: ##
 	
