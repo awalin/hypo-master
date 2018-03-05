@@ -10,7 +10,7 @@
   
 ** The Comment/Sharing page:
 
- ![alt text] (https://github.com/awalin/hypo-master/blob/master/Screen%20Shot%202018-03-04%20at%204.07.54%20PM.png)
+ ![alt text](https://github.com/awalin/hypo-master/blob/master/Screen%20Shot%202018-03-04%20at%204.07.54%20PM.png)
  
   *Form question for organizational safety:
 	
