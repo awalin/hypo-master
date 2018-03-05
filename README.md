@@ -6,12 +6,19 @@ The platform user interface has three main parts:
 2. Sharing/ Mentoring/finding helpful voice: After reporting the victims can choose to share their detailed expereince with others, he or she can choose to select members of their own organizations only or to everyone. The default is only among their same organizations/ members who identify to be from teh same organizations.
 
 3. A details/ researched aggregated overview dashboard: we collect the anonymized data from the reports and create an overall aggregated dashboard to give people an overall picture of our work environment, when it comes to gender-based misconduct and sexual harassment. The dashboard has several components:
-- a tag cloud showing the most common words appearing in teh reports/stories. 
-- a stat in a pie chart showing who is usually responsible for the miscondust or harassment. This helps people/organization to understand where to focus their energy when it comes to mitigate the problem. 
-- a bar chart shwoing if the HR/ authority is helpful enough to the victims. A score of 1 means not helpful 7 means very helpful. 
+
+ Top: All Organizations-wide (Industry/Campus) overall trend:
+ 
+- A stat in a pie chart showing who is usually responsible for the miscondust or harassment. This helps people/organization to understand where to focus their energy when it comes to mitigate the problem. 
+- A tag cloud showing the most common words appearing in teh reports/stories.
+- A bar chart shwoing if the HR/ authority is helpful enough to the victims. A score of 1 means not helpful 7 means very helpful. 
+
+Bottom: Grouped by organizations:
 - Next we show all the reports grouped by different organizations. We have used random names for imaginary organizations. 
 - A timeline view shows when the reports were filed, so we can at least see the accumulation of the reports, we also see that there is a pause of reports, may be at that time there were some social anti-harassment movement was hoing on and harassers were more cautious.
 - We also show a total reports by each organizations. 
+
+This visualizations can truly paint the big pictures while keeping the victims anonymous. We think this dashboard view should be accessible to all.
 
 
 ** The Reporting Form:
